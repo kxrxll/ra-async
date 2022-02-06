@@ -9,7 +9,7 @@ function ServiceFormNew() {
 
   const handleAdd = (evt) => {
     evt.preventDefault();
-    dispatch(addService(name, price));
+    addService(dispatch, name, price);
     evt.target.reset();
   }
 

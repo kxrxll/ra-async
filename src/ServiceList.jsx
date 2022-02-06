@@ -1,6 +1,9 @@
 import React, {useState} from 'react';
 import {nanoid} from 'nanoid';
 import ServiceItem from './ServiceItem';
+import Alert from './Alert';
+import Spinner from './Spinner';
+import { useSelector } from 'react-redux';
 
 function ServiceList({items, toEditMode, sendEditItem}) {
 
@@ -10,6 +13,8 @@ function ServiceList({items, toEditMode, sendEditItem}) {
     setFilter(evt.target.value);
   }
 
+  const {loading, error} = useSelector(state => state);
+
   return (
     <>
       <div className="input-group input-group-sm mb-3">
@@ -17,6 +22,8 @@ function ServiceList({items, toEditMode, sendEditItem}) {
         <input type="text" className="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" 
         onChange={handleFilterChange}/>
       </div>
+      {error ? <Alert/> : false}
+      {loading ? <Spinner/> : false}
        <ul className="list-group">
       {filter === '' ? 
         items.map(item => <ServiceItem item={item} toEditMode={toEditMode} sendEditItem={sendEditItem} key={nanoid()}/>) 

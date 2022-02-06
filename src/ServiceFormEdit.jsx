@@ -1,13 +1,13 @@
 import React, {useState} from 'react';
 import {useDispatch} from 'react-redux';
-import {editService} from './actionCreators';
+import {changeServiceField} from './actionCreators';
 
 function ServiceForm({item, toEditMode}) {
   // Redux
   const dispatch = useDispatch();
   const handleSubmit = (evt) => {
     evt.preventDefault();
-    dispatch(editService(item.id, initName, initPrice));
+    dispatch(changeServiceField( initName, initPrice));
     evt.target.reset();
   }
 

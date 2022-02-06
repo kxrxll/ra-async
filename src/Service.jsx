@@ -1,14 +1,22 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import './bootstrap.css';
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import ServiceFormNew from './ServiceFormNew';
 import ServiceFormEdit from './ServiceFormEdit';
 import ServiceList from './ServiceList';
+import { fetchServices } from './actionCreators';
 
 function Service() {
 
   // Redux state
-  const items = useSelector(state => state);
+  const items = useSelector(state => state.items);
+
+  // AJAX
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    fetchServices(dispatch)
+    }, [dispatch])
 
   // Edit mode handling
   const [isEditMode, setIsEditMode] = useState(false);

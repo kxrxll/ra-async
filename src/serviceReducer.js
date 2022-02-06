@@ -1,26 +1,32 @@
 import {nanoid} from 'nanoid';
-import {ADD_SERVICE, REMOVE_SERVICE, EDIT_SERVICE} from './serviceActions';
+import {ADD_SERVICE, REMOVE_SERVICE, CHANGE_SERVICE_FIELD, FETCH_SERVICES_REQUEST, FETCH_SERVICES_FAILURE, FETCH_SERVICES_SUCCESS} from './serviceActions';
 
-const initialState = [
-{id: nanoid(), name: 'Замена стекла', price: 21000},
-{id: nanoid(), name: 'Замена дисплея', price: 25000},
-];
+const initialState = {
+  items: [],
+  loading: false,
+  error: null
+};
 
 export default function serviceReducer(state = initialState, action) {
   switch (action.type) {
     case ADD_SERVICE:
       const {name, price} = action.payload;
-      return [...state, {id: nanoid(), name, price: Number(price)}];
+      return {...state, items: [...state.items, {id: nanoid(), name, price: Number(price)}], loading: false, error: null};
     case REMOVE_SERVICE:
       const {id} = action.payload;
-      return state.filter(service => service.id !== id);
-    case EDIT_SERVICE:
-      const data = action.payload;
-      const idToFind = data.id;
-      const nameToEdit = data.name;
-      const priceToEdit = data.price;
-      const newState = state.filter(service => service.id !== idToFind);
-      return [...newState, {id: idToFind, name: nameToEdit, price: Number(priceToEdit)}];
+      return {...state, items: state.items.filter(o => o.id !== id)};
+    case CHANGE_SERVICE_FIELD:
+      const { newName, value } = action.payload;
+      const { item } = state;
+      return { ...state, item: {...item, [newName]: value }};
+    case FETCH_SERVICES_REQUEST:
+      return {...state, loading: true, error: null};
+    case FETCH_SERVICES_FAILURE:
+      const {error} = action.payload;
+      return {...state, loading: false, error};
+    case FETCH_SERVICES_SUCCESS:
+      const {items} = action.payload;
+      return {...state, items, loading: false, error: null};
     default:
       return state;
 }
